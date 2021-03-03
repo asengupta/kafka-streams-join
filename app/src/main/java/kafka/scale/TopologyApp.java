@@ -32,6 +32,7 @@ public class TopologyApp {
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "order-diagnostic-join");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(StreamsConfig.TOPOLOGY_OPTIMIZATION_CONFIG, StreamsConfig.OPTIMIZE);
+//        props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 100);
 //        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 //        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         final StreamsBuilder streamsBuilder = new StreamsBuilder();
@@ -44,6 +45,7 @@ public class TopologyApp {
 //        joinedStream.to("baseline-order-output-stream");
         final Topology topology = streamsBuilder.build();
         final KafkaStreams streams = new KafkaStreams(topology, props);
+        streams.cleanUp();
         System.out.println(topology.describe());
 
         final CountDownLatch latch = new CountDownLatch(1);

@@ -2,6 +2,7 @@ package model;
 
 public class OrderDiagnostic {
     public String key;
+    public String data = "iudhcjdbhckljdlciuhdilchcchediuhcdehchdchejfhejchjkhcjuehckjdsncjhbdjhnbdejhchbdsjhfnbdjfbhjhdsbnfjhdhfjrebhfjkdsbhcjhdsbnjflhdhkufhdsjhlfhdshjkfdjlshbhfjkhdsbfhjldsbhfjhkdshbjfhdsjkfhdsjkhfghkjhdsgfjkhdsgfhjkdsbcjhkdsghuyfhdsjhlfhudsghfjkdshfkudshjfhgdsuyfhdsuyfhgudsfdsfdsf";
 
     public OrderDiagnostic() {
     }
