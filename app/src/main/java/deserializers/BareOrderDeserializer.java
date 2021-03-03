@@ -20,7 +20,7 @@ public class BareOrderDeserializer implements Deserializer {
     @Override
     public Object deserialize(String s, byte[] bytes) {
         try {
-            System.out.println("Bytes = " + bytes);
+//            System.out.println("Bytes = " + bytes);
             BareOrder bareOrder = objectMapper.readValue(bytes, BareOrder.class);
             return bareOrder;
         } catch (IOException e) {
@@ -32,7 +32,7 @@ public class BareOrderDeserializer implements Deserializer {
     @Override
     public Object deserialize(String topic, Headers headers, byte[] data) {
         try {
-            System.out.println("Bytes = " + data);
+//            System.out.println("Bytes = " + data);
             BareOrder bareOrder = objectMapper.readValue(data, BareOrder.class);
             return bareOrder;
         } catch (IOException e) {

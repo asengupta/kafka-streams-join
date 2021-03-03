@@ -8,6 +8,6 @@ import org.apache.kafka.streams.kstream.ValueJoiner;
 public class OrderValueJoiner implements ValueJoiner<BareOrder, OrderDiagnostic, BaselineOrder> {
     @Override
     public BaselineOrder apply(BareOrder bareOrder, OrderDiagnostic orderDiagnostic) {
-        return new BaselineOrder();
+        return new BaselineOrder(bareOrder, orderDiagnostic);
     }
 }

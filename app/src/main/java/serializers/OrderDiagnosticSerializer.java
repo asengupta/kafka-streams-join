@@ -19,7 +19,7 @@ public class OrderDiagnosticSerializer implements Serializer {
     public byte[] serialize(String s, Object o) {
         try {
             byte[] bytes = objectMapper.writeValueAsBytes(o);
-            System.out.println("BYTES = " + bytes);
+//            System.out.println("BYTES = " + bytes);
             return bytes;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -31,7 +31,7 @@ public class OrderDiagnosticSerializer implements Serializer {
     public byte[] serialize(String topic, Headers headers, Object data) {
         try {
             byte[] bytes = objectMapper.writeValueAsBytes(data);
-            System.out.println("BYTES = " + bytes);
+//            System.out.println("BYTES = " + bytes);
             return bytes;
         } catch (JsonProcessingException e) {
             throw new SerializationException(e);

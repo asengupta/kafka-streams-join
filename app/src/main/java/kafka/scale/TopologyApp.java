@@ -31,11 +31,11 @@ public class TopologyApp {
         final Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "order-diagnostic-join");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.TOPOLOGY_OPTIMIZATION_CONFIG, StreamsConfig.OPTIMIZE);
 //        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 //        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         final StreamsBuilder streamsBuilder = new StreamsBuilder();
-        final KStream<String, BareOrder> bareOrderStream = streamsBuilder.stream("bare-order-input-stream", Consumed.with(Serdes.String(), Serdes.serdeFrom(new BareOrderSerializer(),
-                new BareOrderDeserializer())));
+        final KStream<String, BareOrder> bareOrderStream = streamsBuilder.stream("bare-order-input-stream", Consumed.with(Serdes.String(), Serdes.serdeFrom(new BareOrderSerializer(), new BareOrderDeserializer())));
         final KStream<String, OrderDiagnostic> orderDiagnosticStream = streamsBuilder.stream("order-diagnostic-input-stream", Consumed.with(Serdes.String(), Serdes.serdeFrom(new OrderDiagnosticSerializer(), new OrderDiagnosticDeserializer())));
         KStream<String, BaselineOrder> joinedStream = bareOrderStream.join(orderDiagnosticStream, new OrderValueJoiner(),
                 JoinWindows.of(TimeUnit.MINUTES.toMillis(5)), Joined.with(Serdes.String(),
