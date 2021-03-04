@@ -13,11 +13,8 @@ public class BaselineOrder {
         this.bareOrder = bareOrder;
         this.orderDiagnostic = orderDiagnostic;
         total ++;
-        if (total == 1000000 - 1) System.out.println("DONE");
+        if (total >= 1000000 - 1) System.out.println("DONE");
 //        System.out.println("Creating a BaselineOrder..." + bareOrder.key + "/" + orderDiagnostic.key + "DATA " + bareOrder.data + "/" + orderDiagnostic.data );
-    }
-
-    public BaselineOrder(BareOrder bareOrder, OrderDiagnostic orderDiagnostic, boolean b) {
-        System.out.println("This is from Joiner");
+        System.out.println("Creating a BaselineOrder..." + bareOrder.key + "/" + orderDiagnostic.key);
     }
 }

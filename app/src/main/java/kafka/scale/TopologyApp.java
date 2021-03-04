@@ -1,6 +1,7 @@
 package kafka.scale;
 
 import deserializers.BareOrderDeserializer;
+import deserializers.BaselineOrderDeserializer;
 import deserializers.OrderDiagnosticDeserializer;
 import deserializers.OrderValueJoiner;
 import model.BareOrder;
@@ -11,11 +12,9 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.JoinWindows;
-import org.apache.kafka.streams.kstream.Joined;
-import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.*;
 import serializers.BareOrderSerializer;
+import serializers.BaselineOrderSerializer;
 import serializers.OrderDiagnosticSerializer;
 
 import java.util.Properties;
@@ -31,7 +30,7 @@ public class TopologyApp {
         final Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "order-diagnostic-join");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(StreamsConfig.TOPOLOGY_OPTIMIZATION_CONFIG, StreamsConfig.OPTIMIZE);
+//        props.put(StreamsConfig.TOPOLOGY_OPTIMIZATION_CONFIG, StreamsConfig.OPTIMIZE);
 //        props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 100);
 //        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 //        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
@@ -42,18 +41,18 @@ public class TopologyApp {
                 JoinWindows.of(TimeUnit.MINUTES.toMillis(5)), Joined.with(Serdes.String(),
                         Serdes.serdeFrom(new BareOrderSerializer(), new BareOrderDeserializer()),
                         Serdes.serdeFrom(new OrderDiagnosticSerializer(), new OrderDiagnosticDeserializer())));
-//        joinedStream.to("baseline-order-output-stream");
+        joinedStream.to("baseline-order-output-stream", Produced.with(Serdes.String(), Serdes.serdeFrom(new BaselineOrderSerializer(), new BaselineOrderDeserializer())));
         final Topology topology = streamsBuilder.build();
         final KafkaStreams streams = new KafkaStreams(topology, props);
         streams.cleanUp();
         System.out.println(topology.describe());
 
-        final CountDownLatch latch = new CountDownLatch(1);
+//        final CountDownLatch latch = new CountDownLatch(1);
         Runtime.getRuntime().addShutdownHook(new Thread("streams-shutdown-hook") {
             @Override
             public void run() {
                 streams.close();
-                latch.countDown();
+//                latch.countDown();
                 System.out.println("Stopping Streams...");
             }
         });
@@ -61,7 +60,7 @@ public class TopologyApp {
         try {
             System.out.println("Starting Streams...");
             streams.start();
-            latch.await();
+//            latch.await();
         } catch (Throwable e) {
             System.exit(1);
         }
